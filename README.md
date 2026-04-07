@@ -29,17 +29,15 @@ npm run dev
 ```
 访问 [http://localhost:3000](http://localhost:3000) 即可开始使用。
 
-### 4. 生产环境部署
-如果你想将本项目部署到 GitHub 或其他云平台（如 Railway, Zeabur, Render 等）：
+## GitHub Pages 部署指南
 
-1. **构建项目**：
-   ```bash
-   npm run build
-   ```
-2. **启动服务**：
-   ```bash
-   npm start
-   ```
+本项目已针对 GitHub Pages 进行优化：
+
+1.  **Serverless 查询**：前端直接调用 `mcstatus.io`，无需后端服务器即可在静态空间运行。
+2.  **自动部署**：已配置 GitHub Actions。
+    -   将代码推送到 `main` 分支。
+    -   在 GitHub 项目设置的 **Pages** 页面，将 **Source** 设置为 **GitHub Actions**。
+    -   等待 Action 运行完成后，您的网站将自动发布。
 
 ## 技术栈
 

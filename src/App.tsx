@@ -48,16 +48,35 @@ export default function App() {
 
     try {
       const type = isBedrock ? 'bedrock' : 'java';
-      const response = await fetch(`/api/mc-status?type=${type}&address=${encodeURIComponent(address.trim())}`);
+      // 直接调用 mcstatus.io 的 API，因为它支持跨域 (CORS)
+      const apiUrl = `https://api.mcstatus.io/v2/status/${type}/${encodeURIComponent(address.trim())}`;
+      
+      const response = await fetch(apiUrl);
       
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       
-      const data = await response.json();
+      const msData = await response.json();
 
-      if (data.online) {
-        setStatus(data);
+      if (msData.online) {
+        // 将数据格式化为我们组件需要的结构
+        setStatus({
+          online: true,
+          ip: msData.host,
+          port: msData.port,
+          version: msData.version?.name_clean || msData.version?.name,
+          players: {
+            online: msData.players.online,
+            max: msData.players.max,
+            list: msData.players.list?.map((p: any) => p.name_clean)
+          },
+          motd: {
+            clean: msData.motd?.clean?.split('\n') || []
+          },
+          icon: msData.icon,
+          latency: 0 // 客户端直接请求，延迟由浏览器处理
+        });
       } else if (!isPolling) {
         setError('服务器当前处于离线状态或地址错误。');
       }
