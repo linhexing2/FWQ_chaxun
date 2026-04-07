@@ -79,7 +79,7 @@ export default function App() {
     if (status && status.online) {
       interval = setInterval(() => {
         fetchStatus(true);
-      }, 5000); // Poll every 5 seconds
+      }, 1000); // Poll every 1 second
     }
 
     return () => {
