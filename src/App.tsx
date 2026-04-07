@@ -76,7 +76,8 @@ export default function App() {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     
-    if (status && status.online) {
+    // Only start polling if we have a status and it's online
+    if (status?.online) {
       interval = setInterval(() => {
         fetchStatus(true);
       }, 1000); // Poll every 1 second
@@ -85,7 +86,9 @@ export default function App() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [status, fetchStatus]);
+    // We only want to restart the interval if the online status changes or the address/type changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status?.online, fetchStatus]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -258,13 +261,16 @@ export default function App() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <motion.div 
                   whileHover={{ y: -5 }}
-                  className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4"
+                  className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4 relative overflow-hidden"
                 >
                   <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
                     <Users className="w-6 h-6" />
                   </div>
-                  <div>
-                    <p className="text-slate-400 text-sm font-medium">在线人数</p>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <p className="text-slate-400 text-sm font-medium">在线人数</p>
+                      <span className="flex h-2 w-2 rounded-full bg-green-500 animate-pulse" title="实时刷新中" />
+                    </div>
                     <p className="text-xl font-bold text-slate-900">
                       {status.players?.online} / {status.players?.max}
                     </p>
