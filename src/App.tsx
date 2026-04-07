@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Server, Users, Globe, ShieldCheck, ShieldAlert, Copy, Check, Info } from 'lucide-react';
 
@@ -37,12 +37,14 @@ export default function App() {
   const [isBedrock, setIsBedrock] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const fetchStatus = async () => {
+  const fetchStatus = useCallback(async (isPolling = false) => {
     if (!address.trim()) return;
     
-    setLoading(true);
-    setError(null);
-    setStatus(null);
+    if (!isPolling) {
+      setLoading(true);
+      setError(null);
+      setStatus(null);
+    }
 
     try {
       const type = isBedrock ? 'bedrock' : 'java';
@@ -56,15 +58,34 @@ export default function App() {
 
       if (data.online) {
         setStatus(data);
-      } else {
+      } else if (!isPolling) {
         setError('服务器当前处于离线状态或地址错误。');
       }
     } catch (err) {
-      setError('查询失败，请检查网络连接或稍后再试。');
+      if (!isPolling) {
+        setError('查询失败，请检查网络连接或稍后再试。');
+      }
     } finally {
-      setLoading(false);
+      if (!isPolling) {
+        setLoading(false);
+      }
     }
-  };
+  }, [address, isBedrock]);
+
+  // Real-time latency update polling
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    
+    if (status && status.online) {
+      interval = setInterval(() => {
+        fetchStatus(true);
+      }, 5000); // Poll every 5 seconds
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [status, fetchStatus]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -73,7 +94,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f4f8] text-slate-800 font-sans p-4 md:p-8 selection:bg-blue-100">
+    <div className="min-h-screen bg-[#f0f4f8] text-slate-800 font-sans p-4 md:p-8 selection:bg-blue-100 relative">
+      {/* Top Left Text */}
+      <div className="absolute top-4 left-4 text-[10px] font-bold text-slate-300 pointer-events-none select-none">
+        ™木鈑
+      </div>
+
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <motion.header 
@@ -110,7 +136,7 @@ export default function App() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={fetchStatus}
+                onClick={() => fetchStatus()}
                 disabled={loading}
                 className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-lg shadow-blue-200 flex items-center gap-2 disabled:opacity-50 transition-all"
               >
@@ -252,9 +278,9 @@ export default function App() {
                   <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
                     <Globe className="w-6 h-6" />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="text-slate-400 text-sm font-medium">服务器版本</p>
-                    <p className="text-xl font-bold text-slate-900 truncate max-w-[200px]">
+                    <p className="text-xl font-bold text-slate-900 break-words">
                       {status.version || "未知"}
                     </p>
                   </div>
