@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Server, Users, Globe, ShieldCheck, ShieldAlert, Copy, Check, Info, Github } from 'lucide-react';
+import { Search, Server, Users, Globe, ShieldCheck, ShieldAlert, Copy, Check, Info, Github, History, Star, Trash2 } from 'lucide-react';
 
 interface ServerStatus {
   online: boolean;
@@ -37,6 +37,40 @@ export default function App() {
   const [isBedrock, setIsBedrock] = useState(false);
   const [copied, setCopied] = useState(false);
   const [repoInfo, setRepoInfo] = useState<{ stars: number; forks: number } | null>(null);
+  const [history, setHistory] = useState<string[]>(() => {
+    const saved = localStorage.getItem('mc-search-history');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem('mc-favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('mc-search-history', JSON.stringify(history));
+  }, [history]);
+
+  useEffect(() => {
+    localStorage.setItem('mc-favorites', JSON.stringify(favorites));
+  }, [favorites]);
+
+  const addToHistory = (addr: string) => {
+    setHistory(prev => {
+      const filtered = prev.filter(item => item !== addr);
+      return [addr, ...filtered].slice(0, 5);
+    });
+  };
+
+  const toggleFavorite = (addr: string) => {
+    setFavorites(prev => {
+      if (prev.includes(addr)) {
+        return prev.filter(item => item !== addr);
+      }
+      return [addr, ...prev];
+    });
+  };
+
+  const clearHistory = () => setHistory([]);
 
   useEffect(() => {
     fetch('https://api.github.com/repos/linhexing2/FWQ_chaxun')
@@ -75,6 +109,7 @@ export default function App() {
       const msData = await response.json();
 
       if (msData.online) {
+        addToHistory(address.trim());
         // 将数据格式化为我们组件需要的结构
         setStatus({
           online: true,
@@ -192,6 +227,14 @@ export default function App() {
                   onChange={(e) => setAddress(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && fetchStatus()}
                 />
+                {address && (
+                  <button
+                    onClick={() => toggleFavorite(address.trim())}
+                    className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+                  >
+                    <Star className={`w-5 h-5 transition-colors ${favorites.includes(address.trim()) ? 'fill-yellow-400 text-yellow-400' : 'text-slate-300'}`} />
+                  </button>
+                )}
               </div>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -222,6 +265,54 @@ export default function App() {
                 基岩版 (BE)
               </button>
             </div>
+
+            {/* History & Favorites Quick Access */}
+            {(history.length > 0 || favorites.length > 0) && (
+              <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-4">
+                {favorites.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                      <Star className="w-3 h-3" /> 我的收藏
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {favorites.map((fav) => (
+                        <button
+                          key={fav}
+                          onClick={() => { setAddress(fav); fetchStatus(); }}
+                          className="px-3 py-1.5 bg-yellow-50 text-yellow-700 rounded-lg text-xs font-medium border border-yellow-100 hover:bg-yellow-100 transition-colors"
+                        >
+                          {fav}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {history.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                        <History className="w-3 h-3" /> 最近查询
+                      </span>
+                      <button onClick={clearHistory} className="text-[10px] text-slate-300 hover:text-red-400 transition-colors flex items-center gap-1">
+                        <Trash2 className="w-3 h-3" /> 清空
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {history.map((item) => (
+                        <button
+                          key={item}
+                          onClick={() => { setAddress(item); fetchStatus(); }}
+                          className="px-3 py-1.5 bg-slate-50 text-slate-500 rounded-lg text-xs font-medium border border-slate-100 hover:bg-slate-100 transition-colors"
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </motion.div>
 
