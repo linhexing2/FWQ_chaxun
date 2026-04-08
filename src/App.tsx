@@ -26,8 +26,7 @@ interface ServerStatus {
   map?: string;
   gamemode?: string;
   software?: string;
-  apiLatency?: number;
-  serverLatency?: number;
+  latency?: number;
 }
 
 export default function App() {
@@ -131,8 +130,7 @@ export default function App() {
             clean: msData.motd?.clean?.split('\n') || []
           },
           icon: msData.icon,
-          apiLatency: latency,
-          serverLatency: msData.latency
+          latency: latency
         });
       } else if (!isPolling) {
         setError('服务器当前处于离线状态或地址错误。');
@@ -481,7 +479,7 @@ export default function App() {
                   </motion.div>
                 )}
 
-                {status.serverLatency !== undefined && (
+                {status.latency !== undefined && (
                   <motion.div 
                     whileHover={{ y: -5 }}
                     className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4"
@@ -490,26 +488,9 @@ export default function App() {
                       <Search className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">服务器延迟</p>
+                      <p className="text-slate-400 text-sm font-medium">查询延迟</p>
                       <p className="text-xl font-bold text-slate-900">
-                        {status.serverLatency} ms
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-
-                {status.apiLatency !== undefined && (
-                  <motion.div 
-                    whileHover={{ y: -5 }}
-                    className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4"
-                  >
-                    <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
-                      <Globe className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-slate-400 text-sm font-medium">接口响应</p>
-                      <p className="text-xl font-bold text-slate-900">
-                        {status.apiLatency} ms
+                        {status.latency} ms
                       </p>
                     </div>
                   </motion.div>
