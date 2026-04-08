@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Server, Users, Globe, ShieldCheck, ShieldAlert, Copy, Check, Info } from 'lucide-react';
+import { Search, Server, Users, Globe, ShieldCheck, ShieldAlert, Copy, Check, Info, Github } from 'lucide-react';
 
 interface ServerStatus {
   online: boolean;
@@ -36,6 +36,21 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [isBedrock, setIsBedrock] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [repoInfo, setRepoInfo] = useState<{ stars: number; forks: number } | null>(null);
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/13400725542as/FWQ_chaxun')
+      .then(res => res.json())
+      .then(data => {
+        if (data.stargazers_count !== undefined) {
+          setRepoInfo({
+            stars: data.stargazers_count,
+            forks: data.forks_count
+          });
+        }
+      })
+      .catch(err => console.error("GitHub API error:", err));
+  }, []);
 
   const fetchStatus = useCallback(async (isPolling = false) => {
     if (!address.trim()) return;
@@ -121,6 +136,29 @@ export default function App() {
       <div className="absolute top-4 left-4 text-[10px] font-bold text-slate-300 pointer-events-none select-none">
         ™木鈑
       </div>
+
+      {/* GitHub Link */}
+      <div className="absolute top-4 right-4 z-50">
+        <motion.a
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          whileTap={{ scale: 0.9 }}
+          href="https://github.com/13400725542as/FWQ_chaxun"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 text-slate-600 hover:text-blue-600 transition-colors"
+        >
+          <Github className="w-4 h-4" />
+          <span className="text-sm font-medium">GitHub</span>
+        </motion.a>
+      </div>
+
+      <a href="https://github.com/13400725542as/FWQ_chaxun" className="github-corner" aria-label="View source on GitHub" target="_blank" rel="noopener noreferrer">
+        <svg width="80" height="80" viewBox="0 0 250 250" style={{ fill: '#2563eb', color: '#fff', position: 'absolute', top: 0, border: 0, right: 0 }} aria-hidden="true">
+          <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+          <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1" fill="currentColor" style={{ transformOrigin: '130px 106px' }} className="octo-arm"></path>
+          <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.3 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.9 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" className="octo-body"></path>
+        </svg>
+      </a>
 
       <div className="max-w-3xl mx-auto">
         {/* Header */}
@@ -391,9 +429,35 @@ export default function App() {
         </AnimatePresence>
 
         {/* Footer */}
-        <footer className="mt-20 text-center text-slate-400 text-sm pb-8">
-          <p>© 2026 MC 服务器状态查询工具</p>
-          <p className="mt-1">数据由 api.mcsrvstat.us 提供</p>
+        <footer className="mt-20 text-center text-slate-400 text-sm pb-8 flex flex-col items-center gap-4">
+          <div className="flex items-center gap-4">
+            <a 
+              href="https://github.com/13400725542as/FWQ_chaxun/actions/workflows/deploy.yml" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="opacity-80 hover:opacity-100 transition-opacity"
+            >
+              <img 
+                src="https://github.com/13400725542as/FWQ_chaxun/actions/workflows/deploy.yml/badge.svg" 
+                alt="Deployment Status" 
+                referrerPolicy="no-referrer"
+              />
+            </a>
+          </div>
+          <div>
+            <p>© 2026 MC 服务器状态查询工具</p>
+            <p className="mt-1">数据由 mcstatus.io 提供</p>
+            {repoInfo && (
+              <div className="mt-4 flex items-center justify-center gap-4 text-xs font-medium text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Check className="w-3 h-3" /> {repoInfo.stars} Stars
+                </span>
+                <span className="flex items-center gap-1">
+                  <Globe className="w-3 h-3" /> {repoInfo.forks} Forks
+                </span>
+              </div>
+            )}
+          </div>
         </footer>
       </div>
     </div>
