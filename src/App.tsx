@@ -39,7 +39,7 @@ export default function App() {
   const [repoInfo, setRepoInfo] = useState<{ stars: number; forks: number } | null>(null);
 
   useEffect(() => {
-    fetch('https://api.github.com/repos/13400725542as/FWQ_chaxun')
+    fetch('https://api.github.com/repos/linhexing2/FWQ_chaxun')
       .then(res => res.json())
       .then(data => {
         if (data.stargazers_count !== undefined) {
@@ -142,7 +142,7 @@ export default function App() {
         <motion.a
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
-          href="https://github.com/13400725542as/FWQ_chaxun"
+          href="https://github.com/linhexing2/FWQ_chaxun"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-200 text-slate-600 hover:text-blue-600 transition-colors"
@@ -152,7 +152,7 @@ export default function App() {
         </motion.a>
       </div>
 
-      <a href="https://github.com/13400725542as/FWQ_chaxun" className="github-corner" aria-label="View source on GitHub" target="_blank" rel="noopener noreferrer">
+      <a href="https://github.com/linhexing2/FWQ_chaxun" className="github-corner" aria-label="View source on GitHub" target="_blank" rel="noopener noreferrer">
         <svg width="80" height="80" viewBox="0 0 250 250" style={{ fill: '#2563eb', color: '#fff', position: 'absolute', top: 0, border: 0, right: 0 }} aria-hidden="true">
           <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
           <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.5 120.5,78.5 C116.4,70.1" fill="currentColor" style={{ transformOrigin: '130px 106px' }} className="octo-arm"></path>
@@ -430,20 +430,6 @@ export default function App() {
 
         {/* Footer */}
         <footer className="mt-20 text-center text-slate-400 text-sm pb-8 flex flex-col items-center gap-4">
-          <div className="flex items-center gap-4">
-            <a 
-              href="https://github.com/13400725542as/FWQ_chaxun/actions/workflows/deploy.yml" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="opacity-80 hover:opacity-100 transition-opacity"
-            >
-              <img 
-                src="https://github.com/13400725542as/FWQ_chaxun/actions/workflows/deploy.yml/badge.svg" 
-                alt="Deployment Status" 
-                referrerPolicy="no-referrer"
-              />
-            </a>
-          </div>
           <div>
             <p>© 2026 MC 服务器状态查询工具</p>
             <p className="mt-1">数据由 mcstatus.io 提供</p>

@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   // If deploying to GitHub Pages, set base to your repository name, e.g., '/FWQ_chaxun/'
-  // base: '/FWQ_chaxun/',
+  base: '/FWQ_chaxun/',
   plugins: [react(), tailwindcss()],
   server: {
     // HMR is disabled in AI Studio via DISABLE_HMR env var.
