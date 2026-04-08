@@ -26,7 +26,8 @@ interface ServerStatus {
   map?: string;
   gamemode?: string;
   software?: string;
-  latency?: number;
+  apiLatency?: number;
+  serverLatency?: number;
 }
 
 export default function App() {
@@ -95,12 +96,15 @@ export default function App() {
       setStatus(null);
     }
 
+    const startTime = Date.now();
     try {
       const type = isBedrock ? 'bedrock' : 'java';
       // 直接调用 mcstatus.io 的 API，因为它支持跨域 (CORS)
       const apiUrl = `https://api.mcstatus.io/v2/status/${type}/${encodeURIComponent(address.trim())}`;
       
-      const response = await fetch(apiUrl);
+      const response = await fetch(apiUrl, { cache: 'no-store' });
+      const endTime = Date.now();
+      const latency = endTime - startTime;
       
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -109,7 +113,9 @@ export default function App() {
       const msData = await response.json();
 
       if (msData.online) {
-        addToHistory(address.trim());
+        if (!isPolling) {
+          addToHistory(address.trim());
+        }
         // 将数据格式化为我们组件需要的结构
         setStatus({
           online: true,
@@ -125,7 +131,8 @@ export default function App() {
             clean: msData.motd?.clean?.split('\n') || []
           },
           icon: msData.icon,
-          latency: 0 // 客户端直接请求，延迟由浏览器处理
+          apiLatency: latency,
+          serverLatency: msData.latency
         });
       } else if (!isPolling) {
         setError('服务器当前处于离线状态或地址错误。');
@@ -203,7 +210,7 @@ export default function App() {
           className="text-center mb-12"
         >
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-4">
-            MC <span className="text-blue-600">服务器查询</span>
+            木鈑MC <span className="text-blue-600">服务器查询</span>
           </h1>
           <p className="text-slate-500 text-lg">输入服务器地址，即刻获取实时状态</p>
         </motion.header>
@@ -474,7 +481,7 @@ export default function App() {
                   </motion.div>
                 )}
 
-                {status.latency !== undefined && (
+                {status.serverLatency !== undefined && (
                   <motion.div 
                     whileHover={{ y: -5 }}
                     className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4"
@@ -483,9 +490,26 @@ export default function App() {
                       <Search className="w-6 h-6" />
                     </div>
                     <div>
-                      <p className="text-slate-400 text-sm font-medium">查询延迟</p>
+                      <p className="text-slate-400 text-sm font-medium">服务器延迟</p>
                       <p className="text-xl font-bold text-slate-900">
-                        {status.latency} ms
+                        {status.serverLatency} ms
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {status.apiLatency !== undefined && (
+                  <motion.div 
+                    whileHover={{ y: -5 }}
+                    className="bg-white p-6 rounded-[2rem] shadow-lg shadow-blue-100/20 flex items-center gap-4"
+                  >
+                    <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
+                      <Globe className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-slate-400 text-sm font-medium">接口响应</p>
+                      <p className="text-xl font-bold text-slate-900">
+                        {status.apiLatency} ms
                       </p>
                     </div>
                   </motion.div>
@@ -522,7 +546,7 @@ export default function App() {
         {/* Footer */}
         <footer className="mt-20 text-center text-slate-400 text-sm pb-8 flex flex-col items-center gap-4">
           <div>
-            <p>© 2026 MC 服务器状态查询工具</p>
+            <p>© 2026 木鈑MC 服务器状态查询工具</p>
             <p className="mt-1">数据由 mcstatus.io 提供</p>
             {repoInfo && (
               <div className="mt-4 flex items-center justify-center gap-4 text-xs font-medium text-slate-400">
